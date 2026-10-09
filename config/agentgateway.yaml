@@ -1,0 +1,46 @@
+# yaml-language-server: $schema=https://agentgateway.dev/schema/config
+#
+# One agentgateway in front of three backends: two local open-weight models
+# served by Ollama, and Claude Sonnet 5 as the frontier baseline. Every
+# candidate answers through the same OpenAI-compatible route so the
+# latency/token numbers all come from the gateway's own access log rather
+# than from three different client libraries timing themselves.
+
+config:
+  adminAddr: 0.0.0.0:15000
+
+gateways:
+  default:
+    port: 3300
+    listeners:
+    - name: llm
+
+llm:
+  gateways: default/llm
+  providers:
+  - name: anthropic
+    provider: anthropic
+    defaults:
+      auth:
+        key:
+          value: "$ANTHROPIC_API_KEY"
+          location:
+            header:
+              name: x-api-key
+      requestHeaders:
+        add:
+          anthropic-version: "2023-06-01"
+  models:
+  - name: qwen3.8
+    provider: ollama
+    params:
+      model: qwen3.8
+      baseUrl: http://host.docker.internal:11434/v1
+  - name: nemotron-3.5-lightning
+    provider: ollama
+    params:
+      model: nemotron-3.5-lightning
+      baseUrl: http://host.docker.internal:11434/v1
+  - name: claude-sonnet-5
+    provider:
+      reference: anthropic
