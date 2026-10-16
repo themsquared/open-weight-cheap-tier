@@ -12,7 +12,7 @@ this interface. One of them failed to produce a parseable answer on **55% of
 calls** (33/60). The other answered reliably but took **15-20x longer per call**
 than Claude Sonnet 5, the model it was supposed to be the budget alternative to.
 
-> 📖 **Read the write-up:** (added once live)
+> 📖 **Read the write-up:** https://webofmike.com/open-weight-cheap-tier/
 
 ## Why these two models, not the four the field is discussing
 
